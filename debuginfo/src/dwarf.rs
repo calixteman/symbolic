@@ -682,7 +682,7 @@ impl<'d, 'a> DwarfUnit<'d, 'a> {
             // Avoid constant allocations by collecting repeatedly into the same buffer and
             // draining the results out of it. This keeps the original buffer allocated and
             // allows for a single allocation per call to `resolve_lines`.
-            let lines = self.resolve_lines(&range_buf, option)?;
+            let lines = self.resolve_lines(&range_buf, option);
 
             let function = Function {
                 address: function_address,
@@ -1059,7 +1059,7 @@ impl std::iter::FusedIterator for DwarfUnitIterator<'_> {}
 /// Options to use with functions_option.
 #[derive(Debug)]
 pub struct DwarfFunctionIteratorOption {
-    collapse_lines: bool,
+    pub collapse_lines: bool,
 }
 
 impl Default for DwarfFunctionIteratorOption {
