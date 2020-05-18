@@ -557,7 +557,8 @@ impl<'d, 'a> DwarfUnit<'d, 'a> {
                 let file = self.resolve_file(row.file_index).unwrap_or_default();
                 let line = row.line.unwrap_or(0);
 
-                if last == Some((row.file_index, line)) {
+                // Calixte: Don't collapse identical lines
+                if false && last == Some((row.file_index, line)) {
                     continue;
                 }
 
@@ -738,6 +739,12 @@ impl<'d, 'a> DwarfUnit<'d, 'a> {
                     // Patch all following line records pointing them to the call location. Stop at
                     // the boundary of the inlinee.
                     for index in start..lines.len() {
+                        // Calixte: disable this stuff
+                        // Introduced here: https://github.com/getsentry/symbolic/commit/d16bc475779ed7dfcf626491c824e8dedb0c7d8b
+                        // and as a consequence: https://github.com/getsentry/symbolic/issues/228
+                        // so in waiting for a fix...
+                        continue;
+
                         let record = &mut lines[index];
                         if record.address >= function_end {
                             break;
